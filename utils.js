@@ -1,7 +1,7 @@
 const Web3 = require('web3');
-const { networks } = require('../truffle-config.js');
+const { networks } = require('./truffle-config.js');
 
-export.module = const getAccountsAndNodes = async () => {
+async function getAccountsAndNodes() {
   let nodes = []; // list of RPC clients (Quorum Nodes)
   let allAccounts = []; // list of all accounts on all nodes
   let accountsOfNode = []; // list of accounts per node
@@ -25,4 +25,6 @@ export.module = const getAccountsAndNodes = async () => {
     allAccounts: allAccounts,
     accountsOfNode: accountsOfNode
   };
-};
+}
+
+module.exports.getAccountsAndNodes = getAccountsAndNodes;

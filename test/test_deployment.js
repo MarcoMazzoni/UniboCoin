@@ -26,10 +26,10 @@ contract('UniboCoin: test if deployment initial status is correct', () => {
       accounts = [...accounts, ...accountList];
     }
     */
-    result = await getAccountsAndNodes();
+    let result = await getAccountsAndNodes();
     nodes = result.nodes;
     accounts = result.allAccounts;
-    accountsOfNode = resutl.accountsOfNode;
+    accountsOfNode = result.accountsOfNode;
   });
 
   it('should put 10000 UniboCoins in the first account of NODE_1', () =>
