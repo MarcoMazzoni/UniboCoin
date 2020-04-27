@@ -1,9 +1,5 @@
 const UniboCoin = artifacts.require('UniboCoin');
 const { getAccountsAndNodes } = require('../utils.js');
-const { networks } = require('../truffle-config.js');
-const Web3 = require('web3');
-
-//const nodes = []; // list of RPC clients (Quorum Nodes)
 
 contract('UniboCoin: test if deployment initial status is correct', () => {
   let nodes = [];
@@ -13,22 +9,9 @@ contract('UniboCoin: test if deployment initial status is correct', () => {
   // With this function we retrieve all the accounts
   // on all the available Quorum nodes
   before(async () => {
-    /*
-    for (let networkName in networks) {
-      quorumClient = new Web3(
-        new Web3.providers.HttpProvider(
-          'http://localhost:' + networks[networkName].port
-        )
-      );
-      nodes.push(quorumClient);
-      accountList = await quorumClient.eth.getAccounts();
-      accountsOfNode.push(accountList);
-      accounts = [...accounts, ...accountList];
-    }
-    */
     let result = await getAccountsAndNodes();
     nodes = result.nodes;
-    accounts = result.allAccounts;
+    allAccounts = result.allAccounts;
     accountsOfNode = result.accountsOfNode;
   });
 
@@ -46,9 +29,9 @@ contract('UniboCoin: test if deployment initial status is correct', () => {
   it('should put 0 UniboCoins in the other accounts', () => {
     // Loop starts from 1, since accounts[0] is
     // the first account of Node 1, that has 10000 UB
-    for (let i = 1; i < accounts.length; ++i) {
+    for (let i = 1; i < allAccounts.length; ++i) {
       UniboCoin.deployed()
-        .then(instance => instance.balanceOf(accounts[i]))
+        .then(instance => instance.balanceOf(allAccounts[i]))
         .then(balance => {
           assert.equal(
             balance.valueOf(),

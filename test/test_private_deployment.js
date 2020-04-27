@@ -1,28 +1,18 @@
 const UniboCoin_private = artifacts.require('UniboCoin_private');
-
-const { networks } = require('../truffle-config.js');
-const Web3 = require('web3');
-
-const nodes = []; // list of RPC clients (Quorum Nodes)
+const { getAccountsAndNodes } = require('../utils.js');
 
 describe('UniboCoin_private contract: test if deployment initial status is correct', () => {
+  let nodes = [];
   let accounts = [];
   let accountsOfNode = [];
 
   // With this function we retrieve all the accounts
   // on all the available Quorum nodes
   before(async function() {
-    for (let networkName in networks) {
-      quorumClient = new Web3(
-        new Web3.providers.HttpProvider(
-          'http://localhost:' + networks[networkName].port
-        )
-      );
-      nodes.push(quorumClient);
-      accountList = await quorumClient.eth.getAccounts();
-      accountsOfNode.push(accountList);
-      accounts = [...accounts, ...accountList];
-    }
+    let result = await getAccountsAndNodes();
+    nodes = result.nodes;
+    accounts = result.allAccounts;
+    accountsOfNode = result.accountsOfNode;
   });
 
   it('should put 10000 UniboCoins in the first account of NODE_1', () =>
